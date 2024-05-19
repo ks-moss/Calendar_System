@@ -122,6 +122,8 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
 
 
 
+
+
 def main():
 
     start_time = datetime.now()
