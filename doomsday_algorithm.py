@@ -129,7 +129,7 @@ def main():
 
     day_of_week_instance = DAY_OF_THE_WEEK()
 
-    years, start_month, start_date = [1002024], "January", 1
+    years, start_month, start_date = [2023, 2024], "January", 1
 
     for year in years:
 
