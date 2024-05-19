@@ -1,5 +1,5 @@
 import threading
-# from datetime import datetime
+from datetime import datetime
 
 # Constants
 MONTHS = [
@@ -10,10 +10,16 @@ MONTHS = [
 
 DAYS_IN_YEAR = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
+PROVIDED_DOOMSDAY = [3, 28, 14, 4, 9, 6, 11, 8, 5, 10, 7, 12]
+
+DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+
+
 
 class DOOMSDAY_OF_THE_YEAR:
-    def __init__(self, year):
-        self.year = year
+    def __init__(self):
+        self.year = None
         self.stop_threads = threading.Event()  # Shared event to signal threads to stop
         self.doomsday_century_code = None
 
@@ -22,10 +28,6 @@ class DOOMSDAY_OF_THE_YEAR:
 
         digitCount = len(str(abs(self.year)))
         digitCountLastTwo = digitCount - 2
-
-        
-        
-        
 
         while not self.stop_threads.is_set():
             if doomsday_century_temp == int(str(self.year)[:digitCountLastTwo]) * (10 ** digitCountLastTwo):
@@ -70,38 +72,48 @@ class DOOMSDAY_OF_THE_YEAR:
 
         return total_number  # 0-6
 
+    def is_leap_year(self):
+
+        if self.year % 4 == 0 and (self.year % 100 != 0 or self.year % 400 == 0):
+            DAYS_IN_YEAR[1] = 29
+            PROVIDED_DOOMSDAY[0] = 32
+            PROVIDED_DOOMSDAY[1] = 29
+        else:
+            DAYS_IN_YEAR[1] = 28
+            PROVIDED_DOOMSDAY[0] = 31
+            PROVIDED_DOOMSDAY[1] = 28
+
+
+
+
 
 class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
-    def __init__(self, year, month, date):
-   
-        super().__init__(year)
+    def __init__(self):
+        super().__init__()
+        self.month = None
+        self.date = None
+        self.calculated_doomsday = None
+
+    def set_year(self, year):
         self.year = year
+        self.stop_threads.clear()
+        self.doomsday_century_code = None
+        super().is_leap_year()
+
+    def set_date(self, month, date):
         self.month = month
         self.date = date
-  
-
-    def is_leap_year(self, year):
-        return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
+        self.calculated_doomsday = self.calculate_doomsday_year()
 
     def calculate_day_of_the_week(self):
 
-        provided_doomsday = [3, 28, 14, 4, 9, 6, 11, 8, 5, 10, 7, 12]
-        days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-
         try:
-            index_month = MONTHS.index(self.month)
-            calculated_doomsday = super().calculate_doomsday_year()
+            doomsday_for_month = PROVIDED_DOOMSDAY[MONTHS.index(self.month)]
 
-            if self.is_leap_year(self.year):
-                provided_doomsday[0] = 32
-                provided_doomsday[1] = 29
-
-            doomsday_for_month = provided_doomsday[index_month]
-
-            result = (self.date - doomsday_for_month) % 7 + calculated_doomsday
+            result = (self.date - doomsday_for_month) % 7 + self.calculated_doomsday
             result %= 7
 
-            return days[result]
+            return DAYS[result]
 
         except ValueError:
             return "Invalid month entered.\n"
@@ -109,32 +121,39 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
 
 
 
+
 def main():
-    year = 2024
 
-    day_of_week_instance = DAY_OF_THE_WEEK(year, "January", 1)
+    start_time = datetime.now()
 
-    for month in MONTHS:
-        print(f"\n+--- Month: {month}, Year: {year}")
+    day_of_week_instance = DAY_OF_THE_WEEK()
 
-        if day_of_week_instance.is_leap_year(year):
-            DAYS_IN_YEAR[1] = 29
-        else:
-            DAYS_IN_YEAR[1] = 28
+    years, start_month, start_date = [1002024], "January", 1
+
+    for year in years:
+
+        day_of_week_instance.set_year(year)
+
+        for month in MONTHS[MONTHS.index(start_month):]:
+
+            print(f"\n+--- Month: {month}, Year: {year}")
+
+            for day in range(start_date, DAYS_IN_YEAR[MONTHS.index(month)] + 1):
+
+                day_of_week_instance.set_date(month, day)
+                print(f"{day_of_week_instance.calculate_day_of_the_week()}, {day} {month} {year}")
+
+            start_date = 1
+
+    stop_time = datetime.now()
+    print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
+    print(f"Stop time: {stop_time.strftime('%H:%M:%S.%f')[:-3]}\n")
+
+    duration = stop_time - start_time
+    print(f"Duration: {duration}\n")
 
 
-        for day in range(1, DAYS_IN_YEAR[MONTHS.index(month)] + 1):
-            day_of_week_instance.month = month
-            day_of_week_instance.date = day
-            day_of_the_week = day_of_week_instance.calculate_day_of_the_week()
 
-            print(f"{day_of_the_week}, {day} {month} {year}")
-
-    # stop_time = datetime.now()
-    # print(f"\nStop time: {stop_time.strftime('%H:%M:%S.%f')[:-3]}")
-
-    # duration = stop_time - start_time
-    # print(f"Duration: {duration}")
 
 if __name__ == "__main__":
     main()
