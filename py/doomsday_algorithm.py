@@ -1,5 +1,5 @@
 import threading
-from datetime import datetime
+
 
 # Constants
 MONTHS = [
@@ -113,37 +113,64 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
             result = (self.date - doomsday_for_month) % 7 + self.calculated_doomsday
             result %= 7
 
-            return DAYS[result]
+            return result
+            # return DAYS[result]
 
         except ValueError:
             return "Invalid month entered.\n"
+       
+        
+    def input_data(self, years):
+
+        return_value =[]
+        temp = []
+
+        month = "January"
+        start_date = 1
+
+        for year in years:
+
+            self.set_year(year)
+
+            for month in MONTHS[MONTHS.index(month):]:
+                temp = []
+
+                for day in range(start_date, DAYS_IN_YEAR[MONTHS.index(month)] + 1):
+
+                    self.set_date(month, day)
+                    temp.append(f"{self.calculate_day_of_the_week()},{day},{month},{year}")
+
+                # start_date = 1
+
+                return_value.append(temp)
+        
+        return return_value
+    
 
 
 
 
+def insert_data(years):
+        
+        years = list(map(int, years))
+
+        calendar = DAY_OF_THE_WEEK()
+        result = calendar.input_data(years)
+
+        return result
+
+
+
+
+
+from datetime import datetime
 
 def main():
 
     start_time = datetime.now()
 
-    day_of_week_instance = DAY_OF_THE_WEEK()
+    result = insert_data([2024])
 
-    years, start_month, start_date = [2023, 2024], "January", 1
-
-    for year in years:
-
-        day_of_week_instance.set_year(year)
-
-        for month in MONTHS[MONTHS.index(start_month):]:
-
-            print(f"\n+--- Month: {month}, Year: {year}")
-
-            for day in range(start_date, DAYS_IN_YEAR[MONTHS.index(month)] + 1):
-
-                day_of_week_instance.set_date(month, day)
-                print(f"{day_of_week_instance.calculate_day_of_the_week()}, {day} {month} {year}")
-
-            start_date = 1
 
     stop_time = datetime.now()
     print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
@@ -151,6 +178,8 @@ def main():
 
     duration = stop_time - start_time
     print(f"Duration: {duration}\n")
+
+    print(result)
 
 
 
