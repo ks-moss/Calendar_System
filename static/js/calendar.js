@@ -5,6 +5,11 @@ const MONTHS = [
     "September", "October", "November", "December"
 ];
 
+
+
+
+
+
 ////////// BY YEAR /////////////
 
 // // Function to make AJAX request to get calendar data
@@ -91,6 +96,9 @@ const MONTHS = [
 
 
 
+
+
+
 ////////// BY MONTH /////////////
 
 // Function to make AJAX request to get calendar data
@@ -160,6 +168,8 @@ async function fetchAndGenerateCalendarByMonth(years, month) {
         console.error("Async Error:", error);
     }
 }
+
+
 
 
 
