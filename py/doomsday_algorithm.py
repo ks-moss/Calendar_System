@@ -120,7 +120,7 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
             return "Invalid month entered.\n"
        
         
-    def input_data(self, years):
+    def by_year(self, years):
 
         return_value =[]
         temp = []
@@ -147,15 +147,42 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
         return return_value
     
 
+    def by_month(self, year, month):
+
+        return_value =[]
+        start_date = 1 # Start from day 1
+
+        self.set_year(year[0])
+
+        for day in range(start_date, DAYS_IN_YEAR[MONTHS.index(month)] + 1):
+
+            self.set_date(month, day)
+            return_value.append(f"{self.calculate_day_of_the_week()},{day},{month},{year[0]}")
+
+        return return_value
+    
 
 
 
-def insert_data(years):
+
+
+
+
+def insert_data_by_year(years):
         
         years = list(map(int, years))
 
         calendar = DAY_OF_THE_WEEK()
-        result = calendar.input_data(years)
+        result = calendar.by_year(years)
+
+        return result
+
+def insert_data_by_month(years, month):
+        
+        years = list(map(int, years))
+
+        calendar = DAY_OF_THE_WEEK()
+        result = calendar.by_month(years, month)
 
         return result
 
@@ -169,7 +196,8 @@ def insert_data(years):
 
 #     start_time = datetime.now()
 
-#     result = insert_data([1002024])
+#     result = insert_data_by_year([2024])        
+#     result = insert_data_by_month([2024], "April")
 
 
 #     stop_time = datetime.now()
