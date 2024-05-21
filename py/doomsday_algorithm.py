@@ -125,8 +125,8 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
         return_value =[]
         temp = []
 
-        month = "January"
-        start_date = 1
+        month = "January" # Start from January
+        start_date = 1 # Start from day 1
 
         for year in years:
 

@@ -75,7 +75,7 @@ async function generateCalendarAsync(data, userInput) {
         // Append the generated HTML to the calendar body
         calendarBody.innerHTML = html;
     } catch (error) {
-        console.error(error.message);
+        console.error("generateCalendarAsync Error:", error.message);
     }
 }
 
@@ -90,6 +90,6 @@ const month_input = "April";
         const response = await getCalendar(years_input);
         await generateCalendarAsync(response, month_input);
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Async Error:", error);
     }
 })();
