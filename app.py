@@ -12,7 +12,6 @@ def new_user():
 @app.route('/get_calendar', methods=['POST'])
 def calendar_generator():
     YEARS = request.form.getlist('years')  # Retrieve multiple values as a list
-
     return insert_data(YEARS)
 
 
