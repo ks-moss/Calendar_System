@@ -6,21 +6,24 @@ const MONTHS = [
 ];
 
 // Function to make AJAX request to get calendar data
-function getCalendar(value, callback) {
-    const formData = new FormData();
-    value.years.forEach(year => formData.append('years', year));
-    $.ajax({
-        url: '/get_calendar',
-        type: 'POST',
-        processData: false,
-        contentType: false,
-        data: formData,
-        success: response => callback(response),
-        error: console.error
+function getCalendar(value) {
+    return new Promise((resolve, reject) => {
+        const formData = new FormData();
+        value.years.forEach(year => formData.append('years', year));
+        $.ajax({
+            url: '/get_calendar',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: response => resolve(response),
+            error: reject
+        });
     });
 }
+
 // Function to generate the calendar HTML dynamically
-function generateCalendar(data, userInput) {
+async function generateCalendarAsync(data, userInput) {
     try {
         // Get calendar body element
         var calendarBody = document.getElementById("calendar-body");
@@ -68,7 +71,7 @@ function generateCalendar(data, userInput) {
                 html += '</tr>';
             }
         }
-        
+
         // Append the generated HTML to the calendar body
         calendarBody.innerHTML = html;
     } catch (error) {
@@ -76,8 +79,17 @@ function generateCalendar(data, userInput) {
     }
 }
 
-// Example usage
-const calendar_data = { years: [2024] };
-getCalendar(calendar_data, function(response) {
-    generateCalendar(response, "May");
-});
+
+
+
+const years_input = { years: [2024] };
+const month_input = "April";
+
+(async () => {
+    try {
+        const response = await getCalendar(years_input);
+        await generateCalendarAsync(response, month_input);
+    } catch (error) {
+        console.error("Error:", error);
+    }
+})();

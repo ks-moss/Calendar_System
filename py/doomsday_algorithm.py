@@ -163,26 +163,26 @@ def insert_data(years):
 
 
 
-from datetime import datetime
+# from datetime import datetime
 
-def main():
+# def main():
 
-    start_time = datetime.now()
+#     start_time = datetime.now()
 
-    result = insert_data([2024])
-
-
-    stop_time = datetime.now()
-    print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
-    print(f"Stop time: {stop_time.strftime('%H:%M:%S.%f')[:-3]}\n")
-
-    duration = stop_time - start_time
-    print(f"Duration: {duration}\n")
-
-    print(result)
+#     result = insert_data([1002024])
 
 
+#     stop_time = datetime.now()
+#     print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
+#     print(f"Stop time: {stop_time.strftime('%H:%M:%S.%f')[:-3]}\n")
+
+#     duration = stop_time - start_time
+#     print(f"Duration: {duration}\n")
+
+#     print(result)
 
 
-if __name__ == "__main__":
-    main()
+
+
+# if __name__ == "__main__":
+#     main()
