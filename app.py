@@ -14,9 +14,9 @@ def calendar_generator_year():
 
 @app.route('/get_calendar_month', methods=['POST'])
 def calendar_generator_month():
-    YEARS = request.form.getlist('years')  # Retrieve multiple values as a list
+    YEAR = request.form.getlist('year')  # Retrieve multiple values as a list
     MONTH = request.form.get('month')
-    return insert_data_by_month(YEARS, MONTH)
+    return insert_data_by_month(YEAR, MONTH)
 
 
 

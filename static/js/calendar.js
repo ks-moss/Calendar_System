@@ -16,7 +16,9 @@ const MONTHS = [
 // function getCalendarByYear(value) {
 //     return new Promise((resolve, reject) => {
 //         const formData = new FormData();
-//         value.years.forEach(year => formData.append('years', year));
+
+//         value.years.forEach(years => formData.append('years', years));
+
 //         $.ajax({
 //             url: '/get_calendar_year',
 //             type: 'POST',
@@ -42,33 +44,40 @@ const MONTHS = [
 //         var calendarBody = document.getElementById("calendar-body");
 //         var html = '';
 
-//         for (var i = 0; i < data[index].length; i++) {
-//             var parts = data[index][i].split(",");
-//             var dayOfWeek = parseInt(parts[0]);
-//             var day = parseInt(parts[1]);
+//         for (var i = 0; i < data.length-1; i++) {   // -1 to get year 2024 from [2024, 2025]
+    
+//             for (var j = 0; j < data[i][index].length; j++) {    // [index] to get the selected month
 
-//             if (dayOfWeek === 0) {
-//                 html += '<tr>';
-//             }
+//                 var parts = data[i][index][j].split(",");
+//                 var dayOfWeek = parseInt(parts[0]);
+//                 var day = parseInt(parts[1]);
 
-//             if (dayOfWeek > 0 && day === 1) {
-//                 for (var j = 0; j < dayOfWeek; j++) {
-//                     html += '<td></td>';
+
+//                 if (dayOfWeek === 0) {
+//                     html += '<tr>';
 //                 }
-//             }
 
-//             html += '<td>' + day + '</td>';
-
-//             if (dayOfWeek === 6) {
-//                 html += '</tr>';
-//             }
-
-//             if (i === data[index].length - 1 && dayOfWeek < 6) {
-//                 for (var k = dayOfWeek; k < 6; k++) {
-//                     html += '<td></td>';
+//                 if (dayOfWeek > 0 && day === 1) {
+//                     for (var k = 0; k < dayOfWeek; k++) {
+//                         html += '<td></td>';
+//                     }
 //                 }
-//                 html += '</tr>';
-//             }
+
+//                 html += '<td>' + day + '</td>';
+
+//                 if (dayOfWeek === 6) {
+//                     html += '</tr>';
+//                 }
+
+
+//                 if (j === data[i][index].length - 1 && dayOfWeek < 6) {
+//                     for (var l = dayOfWeek; l < 6; l++) {
+//                         html += '<td></td>';
+//                     }
+//                     html += '</tr>';
+//                 }
+
+//             }  
 //         }
 
 //         calendarBody.innerHTML = html;
@@ -77,18 +86,26 @@ const MONTHS = [
 //     }
 // }
 
+
 // // Main function for fetching data by year and generating calendar
-// async function fetchAndGenerateCalendarByYear(years, month) {
-//     const userInput = month || "January"; // Default month is January
+// async function fetchAndGenerateCalendarByYear(years) {
 //     const years_input = { years };
     
 //     try {
 //         const response = await getCalendarByYear(years_input);
-//         await generateCalendarAsyncByYear(response, userInput);
+//         await generateCalendarAsyncByYear(response, display_month);
 //     } catch (error) {
 //         console.error("Async Error:", error);
 //     }
 // }
+
+
+
+
+// // Usage
+// const years = [2024, 2025];
+// const display_month = "May"
+// fetchAndGenerateCalendarByYear(years);
 
 
 
@@ -105,7 +122,7 @@ const MONTHS = [
 function getCalendarByMonth(value) {
     return new Promise((resolve, reject) => {
         const formData = new FormData();
-        value.years.forEach(year => formData.append('years', year));
+        formData.append('year', value.year);
         formData.append('month', value.month);
         
         $.ajax({
@@ -122,7 +139,9 @@ function getCalendarByMonth(value) {
 
 // Function to generate the calendar HTML dynamically
 async function generateCalendarAsyncByMonth(data) {
+
     console.log(data) // 1 month
+
     var calendarBody = document.getElementById("calendar-body");
     var html = '';
 
@@ -159,8 +178,8 @@ async function generateCalendarAsyncByMonth(data) {
 }
 
 // Main function for fetching data by month and generating calendar
-async function fetchAndGenerateCalendarByMonth(years, month) {
-    const yearMonth = { years, month };
+async function fetchAndGenerateCalendarByMonth(year, month) {
+    const yearMonth = { year, month };
     try {
         const response = await getCalendarByMonth(yearMonth);
         await generateCalendarAsyncByMonth(response);
@@ -175,7 +194,6 @@ async function fetchAndGenerateCalendarByMonth(years, month) {
 
 
 // Usage
-const years = [2024];
+const year = 2024;
 const month = "May";
-// fetchAndGenerateCalendarByYear(years, month);
-fetchAndGenerateCalendarByMonth(years, month);
+fetchAndGenerateCalendarByMonth(year, month);

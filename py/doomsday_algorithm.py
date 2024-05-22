@@ -99,11 +99,11 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
         self.stop_threads.clear()
         self.doomsday_century_code = None
         super().is_leap_year()
+        self.calculated_doomsday = self.calculate_doomsday_year()
 
     def set_date(self, month, date):
         self.month = month
         self.date = date
-        self.calculated_doomsday = self.calculate_doomsday_year()
 
     def calculate_day_of_the_week(self):
 
@@ -124,27 +124,35 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
 
         return_value =[]
         temp = []
-
-        month = "January" # Start from January
-        start_date = 1 # Start from day 1
+        temp_day = []
+        temp_month = []
+        temp_year = []
 
         for year in years:
+
+            month = "January" # Start from January
+            start_date = 1 # Start from day 1
 
             self.set_year(year)
 
             for month in MONTHS[MONTHS.index(month):]:
-                temp = []
+       
 
                 for day in range(start_date, DAYS_IN_YEAR[MONTHS.index(month)] + 1):
 
                     self.set_date(month, day)
                     temp.append(f"{self.calculate_day_of_the_week()},{day},{month},{year}")
+                    # print(f"{self.calculate_day_of_the_week()},{day},{month},{year}")
 
-                # start_date = 1
+                    # temp_day.append(temp)
+                    # temp = []
+                temp_month.append(temp)
+                temp = []
+            temp_year.append(temp_month)
+            temp_month = []
 
-                return_value.append(temp)
         
-        return return_value
+        return temp_year
     
 
     def by_month(self, year, month):
@@ -177,9 +185,11 @@ def insert_data_by_year(years):
 
         return result
 
-def insert_data_by_month(years, month):
+def insert_data_by_month(year, month):
+        temp_year = []
+        temp_year.append(year)
         
-        years = list(map(int, years))
+        years = list(map(int, year))
 
         calendar = DAY_OF_THE_WEEK()
         result = calendar.by_month(years, month)
@@ -190,27 +200,27 @@ def insert_data_by_month(years, month):
 
 
 
-# from datetime import datetime
+from datetime import datetime
 
-# def main():
+def main():
 
-#     start_time = datetime.now()
+    start_time = datetime.now()
 
-#     result = insert_data_by_year([2024])        
-#     result = insert_data_by_month([2024], "April")
-
-
-#     stop_time = datetime.now()
-#     print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
-#     print(f"Stop time: {stop_time.strftime('%H:%M:%S.%f')[:-3]}\n")
-
-#     duration = stop_time - start_time
-#     print(f"Duration: {duration}\n")
-
-#     print(result)
+    result = insert_data_by_year([2024, 2025])        
+    # result = insert_data_by_month([2024], "April")
 
 
+    stop_time = datetime.now()
+    print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
+    print(f"Stop time: {stop_time.strftime('%H:%M:%S.%f')[:-3]}\n")
+
+    duration = stop_time - start_time
+    print(f"Duration: {duration}\n")
+
+    print(result)
 
 
-# if __name__ == "__main__":
-#     main()
+
+
+if __name__ == "__main__":
+    main()
