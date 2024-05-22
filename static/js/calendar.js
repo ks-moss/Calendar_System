@@ -178,10 +178,10 @@ async function generateCalendarAsyncByMonth(data) {
 }
 
 // Main function for fetching data by month and generating calendar
-async function fetchAndGenerateCalendarByMonth(year, month) {
-    const yearMonth = { year, month };
+async function fetchAndGenerateCalendarByMonth(data_input) {
+    // const yearMonth = { year, month };
     try {
-        const response = await getCalendarByMonth(yearMonth);
+        const response = await getCalendarByMonth(data_input);
         await generateCalendarAsyncByMonth(response);
     } catch (error) {
         console.error("Async Error:", error);
@@ -194,6 +194,9 @@ async function fetchAndGenerateCalendarByMonth(year, month) {
 
 
 // Usage
-const year = 2024;
-const month = "May";
-fetchAndGenerateCalendarByMonth(year, month);
+const data_input = {
+    year: 2024,
+    month: "May"
+}
+
+fetchAndGenerateCalendarByMonth(data_input);
