@@ -115,7 +115,6 @@ const MONTHS = [
 
 
 
-
 ////////// BY MONTH /////////////
 
 // Function to make AJAX request to get calendar data
@@ -135,6 +134,29 @@ function getCalendarByMonth(value) {
             error: reject
         });
     });
+}
+
+// Function to generate the calendar header
+function generateCalendarHeader() {
+    // Array containing the days of the week
+    var daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    // Get the table head element
+    var calendarHead = $("#calebdar-head");
+
+    // Create a table row element
+    var tr = $("<tr>");
+
+    // Loop through the daysOfWeek array to create th elements
+    daysOfWeek.forEach(function(day) {
+        // Create a th element for each day
+        var th = $("<th>").text(day);
+        // Append the th element to the table row
+        tr.append(th);
+    });
+
+    // Append the table row to the table head
+    calendarHead.append(tr);
 }
 
 // Function to generate the calendar HTML dynamically
@@ -177,21 +199,32 @@ async function generateCalendarAsyncByMonth(data) {
     calendarBody.innerHTML = html;
 }
 
+// Function to create the calendar structure
+function createCalendarStructure() {
+    var calendarContainer = $(".calendar");
+    var calendarHTML = `
+            <thead id="calebdar-head">
+                <!-- Dynamic Sun-Sat will be appended here -->
+            </thead>
+            <tbody id="calendar-body">
+                <!-- Dynamic rows will be appended here -->
+            </tbody>
+    `;
+    calendarContainer.html(calendarHTML);
+}
+
+
 // Main function for fetching data by month and generating calendar
 async function fetchAndGenerateCalendarByMonth(data_input) {
-    // const yearMonth = { year, month };
     try {
         const response = await getCalendarByMonth(data_input);
+        createCalendarStructure();
+        generateCalendarHeader();
         await generateCalendarAsyncByMonth(response);
     } catch (error) {
         console.error("Async Error:", error);
     }
 }
-
-
-
-
-
 
 // Usage
 const data_input = {
