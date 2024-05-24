@@ -10,122 +10,17 @@ const MONTHS = [
 
 
 
-////////// BY YEAR /////////////
-
-// // Function to make AJAX request to get calendar data
-// function getCalendarByYear(value) {
-//     return new Promise((resolve, reject) => {
-//         const formData = new FormData();
-
-//         value.years.forEach(years => formData.append('years', years));
-
-//         $.ajax({
-//             url: '/get_calendar_year',
-//             type: 'POST',
-//             processData: false,
-//             contentType: false,
-//             data: formData,
-//             success: response => resolve(response),
-//             error: reject
-//         });
-//     });
-// }
-
-// // Function to generate the calendar HTML dynamically
-// async function generateCalendarAsyncByYear(data, userInput) {
-//     try {
-//         const index = MONTHS.indexOf(userInput);
-//         if (index === -1) {
-//             throw new Error("Invalid month entered.");
-//         }
-
-//         console.log(data) // 12 months
-
-//         var calendarBody = document.getElementById("calendar-body");
-//         var html = '';
-
-//         for (var i = 0; i < data.length-1; i++) {   // -1 to get year 2024 from [2024, 2025]
-    
-//             for (var j = 0; j < data[i][index].length; j++) {    // [index] to get the selected month
-
-//                 var parts = data[i][index][j].split(",");
-//                 var dayOfWeek = parseInt(parts[0]);
-//                 var day = parseInt(parts[1]);
-
-
-//                 if (dayOfWeek === 0) {
-//                     html += '<tr>';
-//                 }
-
-//                 if (dayOfWeek > 0 && day === 1) {
-//                     for (var k = 0; k < dayOfWeek; k++) {
-//                         html += '<td></td>';
-//                     }
-//                 }
-
-//                 html += '<td>' + day + '</td>';
-
-//                 if (dayOfWeek === 6) {
-//                     html += '</tr>';
-//                 }
-
-
-//                 if (j === data[i][index].length - 1 && dayOfWeek < 6) {
-//                     for (var l = dayOfWeek; l < 6; l++) {
-//                         html += '<td></td>';
-//                     }
-//                     html += '</tr>';
-//                 }
-
-//             }  
-//         }
-
-//         calendarBody.innerHTML = html;
-//     } catch (error) {
-//         console.error("generateCalendarAsync Error:", error.message);
-//     }
-// }
-
-
-// // Main function for fetching data by year and generating calendar
-// async function fetchAndGenerateCalendarByYear(years) {
-//     const years_input = { years };
-    
-//     try {
-//         const response = await getCalendarByYear(years_input);
-//         await generateCalendarAsyncByYear(response, display_month);
-//     } catch (error) {
-//         console.error("Async Error:", error);
-//     }
-// }
-
-
-
-
-// // Usage
-// const years = [2024, 2025];
-// const display_month = "May"
-// fetchAndGenerateCalendarByYear(years);
-
-
-
-
-
-
-
-
-
-////////// BY MONTH /////////////
+// //////// BY YEAR /////////////
 
 // Function to make AJAX request to get calendar data
-function getCalendarByMonth(value) {
+function getCalendarByYear(value) {
     return new Promise((resolve, reject) => {
         const formData = new FormData();
-        formData.append('year', value.year);
-        formData.append('month', value.month);
-        
+
+        value.years.forEach(years => formData.append('years', years));
+
         $.ajax({
-            url: '/get_calendar_month',
+            url: '/get_calendar_year',
             type: 'POST',
             processData: false,
             contentType: false,
@@ -136,102 +31,239 @@ function getCalendarByMonth(value) {
     });
 }
 
-// Function to generate the calendar header
-function generateCalendarHeader() {
-    // Array containing the days of the week
-    var daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-    // Get the table head element
-    var calendarHead = $("#calebdar-head");
 
-    // Create a table row element
-    var tr = $("<tr>");
+function generateCalendarForYear(response) {
+    var calendarHTML = ''; // Initialize an empty string to store the HTML
 
-    // Loop through the daysOfWeek array to create th elements
-    daysOfWeek.forEach(function(day) {
-        // Create a th element for each day
-        var th = $("<th>").text(day);
-        // Append the th element to the table row
-        tr.append(th);
-    });
+    // Days of the week
+    var daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    // Append the table row to the table head
-    calendarHead.append(tr);
-}
+    // Append HTML for days of the week
+    
+    // Iterate through the response data
+    for (var i = 0; i < response.length; i++) {
 
-// Function to generate the calendar HTML dynamically
-async function generateCalendarAsyncByMonth(data) {
+        for (var j = 0; j < response[i].length; j++) {
+            
+            var getYearMonth = response[i][j][0].split(",");
+            var year = parseInt(getYearMonth[3]);
+            var month = getYearMonth[2];
+        
+            // Append year-month div inside the table
+            calendarHTML += '<table class="calendar"> <caption class="year-month">' + year + " - " + month +'</caption>'
+            calendarHTML += '<thead><tr>';
+        
+            daysOfWeek.forEach(function(day) {
+                calendarHTML += '<th>' + day + '</th>';
+            });
+            calendarHTML += '</tr></thead><tbody>';
 
-    console.log(data) // 1 month
 
-    var calendarBody = document.getElementById("calendar-body");
-    var html = '';
+        
+            for(var k=0; k<response[i][j].length; k++){
 
-    for (var i = 0; i < data.length; i++) {
-        var parts = data[i].split(",");
-        var dayOfWeek = parseInt(parts[0]);
-        var day = parseInt(parts[1]);
+                var parts = response[i][j][k].split(",");
+       
+                var dayOfWeek = parseInt(parts[0]);
+                var day = parseInt(parts[1]);
 
-        if (dayOfWeek === 0) {
-            html += '<tr>';
-        }
 
-        if (dayOfWeek > 0 && day === 1) {
-            for (var j = 0; j < dayOfWeek; j++) {
-                html += '<td></td>';
+                if (dayOfWeek === 0) {
+                    calendarHTML += '<tr>';
+                }
+
+                if (dayOfWeek > 0 && day === 1) {
+                    for (var l = 0; l < dayOfWeek; l++) {
+                        calendarHTML += '<td></td>';
+                    }
+                }
+
+                calendarHTML += '<td>' + day + '</td>';
+
+                if (dayOfWeek === 6) {
+                    calendarHTML += '</tr>';
+                }
+
+                if (k === response[i][j].length - 1 && dayOfWeek < 6) {
+                    
+                    for (var m = dayOfWeek; m < 6; m++) {
+                        calendarHTML += '<td></td>';
+                    }
+                    calendarHTML += '</tr>';
+                }
+   
             }
+
+            calendarHTML += '</tbody></table>';
+
         }
 
-        html += '<td>' + day + '</td>';
-
-        if (dayOfWeek === 6) {
-            html += '</tr>';
-        }
-
-        if (i === data.length - 1 && dayOfWeek < 6) {
-            for (var k = dayOfWeek; k < 6; k++) {
-                html += '<td></td>';
-            }
-            html += '</tr>';
-        }
+        
     }
-
-    calendarBody.innerHTML = html;
-}
-
-// Function to create the calendar structure
-function createCalendarStructure() {
-    var calendarContainer = $(".calendar-container");
-    var calendarHTML = `
-        <table class="calendar">
-            <thead id="calebdar-head">
-                <!-- Dynamic Sun-Sat will be appended here -->
-            </thead>
-            <tbody id="calendar-body">
-                <!-- Dynamic rows will be appended here -->
-            </tbody>
-        </table>
-    `;
-    calendarContainer.html(calendarHTML);
+    
+    return calendarHTML; // Return the generated HTML
 }
 
 
-// Main function for fetching data by month and generating calendar
-async function fetchAndGenerateCalendarByMonth(data_input) {
+
+
+// Main function for fetching data by year and generating calendar
+async function fetchAndGenerateCalendarByYear(years) {
+    const years_input = { years };
+
     try {
-        const response = await getCalendarByMonth(data_input);
-        createCalendarStructure();
-        generateCalendarHeader();
-        await generateCalendarAsyncByMonth(response);
+        const response = await getCalendarByYear(years_input);
+        
+        var calendarHTML = generateCalendarForYear(response);
+        $('.calendar-container').append(calendarHTML);
+        
     } catch (error) {
         console.error("Async Error:", error);
     }
 }
 
-// Usage
-const data_input = {
-    year: 2024,
-    month: "May"
-}
 
-fetchAndGenerateCalendarByMonth(data_input);
+// Usage
+const years = [2024, 2025];
+const display_month = "May";
+fetchAndGenerateCalendarByYear(years);
+
+
+
+
+
+
+
+
+
+
+// ////////// BY MONTH /////////////
+
+// // Function to make AJAX request to get calendar data
+// function getCalendarByMonth(value) {
+//     return new Promise((resolve, reject) => {
+//         const formData = new FormData();
+//         formData.append('year', value.year);
+//         formData.append('month', value.month);
+        
+//         $.ajax({
+//             url: '/get_calendar_month',
+//             type: 'POST',
+//             processData: false,
+//             contentType: false,
+//             data: formData,
+//             success: response => resolve(response),
+//             error: reject
+//         });
+//     });
+// }
+
+// // Function to generate the calendar header
+// function generateCalendarHeader() {
+//     // Array containing the days of the week
+//     var daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+//     // Get the table head element
+//     var calendarHead = $("#calebdar-head");
+
+//     // Create a table row element
+//     var tr = $("<tr>");
+
+//     // Loop through the daysOfWeek array to create th elements
+//     daysOfWeek.forEach(function(day) {
+//         // Create a th element for each day
+//         var th = $("<th>").text(day);
+//         // Append the th element to the table row
+//         tr.append(th);
+//     });
+
+//     // Append the table row to the table head
+//     calendarHead.append(tr);
+// }
+
+
+
+// function generateCalendarForYear(response) {
+//     var calendarHTML = ''; // Initialize an empty string to store the HTML
+
+//     // Days of the week
+//     var daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+//     var getYearMonth = response[0].split(",");
+//     var year = parseInt(getYearMonth[3]);
+//     var month = getYearMonth[2];
+
+//     // Append year-month div inside the table
+//     calendarHTML += '<table class="calendar"> <caption class="year-month">' + year + " - " + month +'</caption>'
+//     calendarHTML += '<thead><tr>';
+
+//     daysOfWeek.forEach(function(day) {
+//         calendarHTML += '<th>' + day + '</th>';
+//     });
+//     calendarHTML += '</tr></thead><tbody>';
+    
+    
+//     for (var i = 0; i < response.length; i++) {
+
+//         var parts = response[i].split(",");
+//         var dayOfWeek = parseInt(parts[0]);
+//         var day = parseInt(parts[1]);
+    
+
+//         if (dayOfWeek === 0) {
+//             calendarHTML += '<tr>';
+//         }
+
+        
+
+//         if (dayOfWeek > 0 && day === 1) {
+//             for (var j = 0; j < dayOfWeek; j++) {
+//                 calendarHTML += '<td></td>';
+                
+//             }
+//         }
+
+//         calendarHTML += '<td>' + day + '</td>';
+
+//         if (dayOfWeek === 6) {
+//             calendarHTML += '</tr>';
+//         }
+
+//         if (i === response.length - 1 && dayOfWeek < 6) {
+            
+//             for (var m = dayOfWeek; m < 6; m++) {
+//                 calendarHTML += '<td></td>';
+//             }
+//             calendarHTML += '</tr>';
+//         }
+   
+
+//     }
+
+//     calendarHTML += '</tbody></table>';
+    
+//     return calendarHTML; // Return the generated HTML
+// }
+
+
+// // Main function for fetching data by month and generating calendar
+// async function fetchAndGenerateCalendarByMonth(data_input) {
+//     try {
+//         const response = await getCalendarByMonth(data_input);
+
+//         var calendarHTML = generateCalendarForYear(response);
+//         $('.calendar-container').append(calendarHTML);
+//     } catch (error) {
+//         console.error("Async Error:", error);
+//     }
+// }
+
+
+// // Usage
+// const data_input = {
+//     year: 2024,
+//     month: "May"
+// }
+
+// fetchAndGenerateCalendarByMonth(data_input);
