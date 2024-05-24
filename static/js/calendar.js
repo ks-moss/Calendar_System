@@ -201,14 +201,16 @@ async function generateCalendarAsyncByMonth(data) {
 
 // Function to create the calendar structure
 function createCalendarStructure() {
-    var calendarContainer = $(".calendar");
+    var calendarContainer = $(".calendar-container");
     var calendarHTML = `
+        <table class="calendar">
             <thead id="calebdar-head">
                 <!-- Dynamic Sun-Sat will be appended here -->
             </thead>
             <tbody id="calendar-body">
                 <!-- Dynamic rows will be appended here -->
             </tbody>
+        </table>
     `;
     calendarContainer.html(calendarHTML);
 }
