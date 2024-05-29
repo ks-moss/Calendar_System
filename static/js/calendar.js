@@ -126,7 +126,6 @@ async function fetchAndGenerateCalendarByYear(years) {
 
 // Usage
 const years = [2024, 2025];
-const display_month = "May";
 fetchAndGenerateCalendarByYear(years);
 
 
@@ -138,7 +137,7 @@ fetchAndGenerateCalendarByYear(years);
 
 
 
-// ////////// BY MONTH /////////////
+////////// BY MONTH /////////////
 
 // // Function to make AJAX request to get calendar data
 // function getCalendarByMonth(value) {
