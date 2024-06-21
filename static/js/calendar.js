@@ -5,7 +5,7 @@ const MONTHS = [
     "September", "October", "November", "December"
 ];
 
-const DFW = [
+const DAYS_OF_THE_WEEK = [
     "Sunday", "Monday", "Tuesday", 
     "Wednesday", "Thursday", "Friday", "Saturday"
 ];
@@ -266,6 +266,8 @@ function displayYears(currentYear) {
 
 function displayMonths(selectedYear) {
 
+    console.log(selectedYear)
+
 
     let monthsHtml = '<div class="months-selection">';
     
@@ -293,7 +295,7 @@ function displayMonths(selectedYear) {
     const $monthSelection = $(
 
         '<div class="yearMonths-display">' +
-            selectedYear +
+            selectedYear + '<div class="carrot"></div>' +
         '</div>' + monthsHtml
 
 
@@ -364,19 +366,20 @@ function getCalendarByMonth(value) {
 function generateCalendarForYear(response) {
     var calendarHTML = ''; // Initialize an empty string to store the HTML
 
-    // Days of the week
-    var daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
     var getYearMonth = response[0].split(",");
     var year = parseInt(getYearMonth[3]);
     var month = getYearMonth[2];
 
     // Append year-month div inside the table
-    calendarHTML += '<table class="calendar"> <caption class="year-month" data-year="' + year + '">' + year + " - " + month +'</caption>';
+    calendarHTML += '<table class="calendar">';
+    calendarHTML += '<caption>';
+    calendarHTML += '<div class="month-year" data-year="' + year + '">' + year + " - " + month;
+    calendarHTML += '<div class="carrot"></div>' + '</div>';
+    calendarHTML += '</caption>';
     calendarHTML += '<thead><tr>';
 
-    daysOfWeek.forEach(function(day) {
-        calendarHTML += '<th>' + day + '</th>';
+    DAYS_OF_THE_WEEK.forEach(function(day) {
+        calendarHTML += '<th>' + day.slice(0,3) + '</th>';
     });
     calendarHTML += '</tr></thead><tbody>';
     
@@ -384,31 +387,31 @@ function generateCalendarForYear(response) {
     for (var i = 0; i < response.length; i++) {
 
         var parts = response[i].split(",");
-        var dayOfWeek = parseInt(parts[0]);
+        var dfw = parseInt(parts[0]);
         var day = parseInt(parts[1]);
     
 
-        if (dayOfWeek === 0) {
+        if (dfw === 0) {
             calendarHTML += '<tr>';
         }
 
-        if (dayOfWeek > 0 && day === 1) {
-            for (var j = 0; j < dayOfWeek; j++) {
+        if (dfw > 0 && day === 1) {
+            for (var j = 0; j < dfw; j++) {
                 calendarHTML += '<td></td>';
                 
             }
         }
 
         // Add data attributes to the td element
-        calendarHTML += '<td data-year="' + year + '" data-month="' + month + '" data-day="' + day + '" data-dfw="' + DFW[dayOfWeek] + '">' + day + '</td>';
+        calendarHTML += '<td data-year="' + year + '" data-month="' + month + '" data-day="' + day + '" data-dfw="' + DAYS_OF_THE_WEEK[dfw] + '">' + day + '</td>';
 
-        if (dayOfWeek === 6) {
+        if (dfw === 6) {
             calendarHTML += '</tr>';
         }
 
-        if (i === response.length - 1 && dayOfWeek < 6) {
+        if (i === response.length - 1 && dfw < 6) {
             
-            for (var m = dayOfWeek; m < 6; m++) {
+            for (var m = dfw; m < 6; m++) {
                 calendarHTML += '<td></td>';
             }
             calendarHTML += '</tr>';
@@ -454,7 +457,7 @@ async function fetchAndGenerateCalendarByMonth(data_input) {
             }
         });
 
-        $('.calendar caption').on('click', function() {
+        $('.calendar .month-year').on('click', function() {
             var selectedYear = $(this).data('year');
             // console.log(selectedYear);
 

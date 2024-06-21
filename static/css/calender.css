@@ -23,15 +23,14 @@ body {
 }
 
 
-
 .calendar-container {
     
-    height: 100%;
     width: 100%;
 
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border: solid 2px rgb(55, 255, 0);
     
   
 }
@@ -42,31 +41,64 @@ body {
     border-collapse: collapse;
     box-shadow: 0 0 20px #00000026;
     table-layout: fixed;
-    margin: 0.5rem;
-}
-
-.year-month {
-    font-size: 15px;
-    text-align: center;
-    background-color: #9dff00;
-    height: 30px;
-    padding: 5px 0; 
-    width: 100%; 
+   
 }
 
 
 .calendar caption {
-    text-align: center;
-    caption-side: top;
+    
     width: 100%;
     display: table-caption;
+}
+
+
+.calendar caption .month-year {
+    height: 30px;
+    
+    position: relative;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #ff6f00;
     cursor: pointer;
     transition: background-color 0.5s, color 0.5s;
 }
 
-.calendar caption:hover{
+.calendar caption .month-year:hover{
     background-color: #ffc800;
 }
+
+
+
+
+
+.carrot {
+    position: absolute;
+    right: 0;
+
+    font-weight: 800;
+
+    margin-right: 10px;
+    font-size: 20px;
+    transform: scaleY(-1); 
+}
+
+.carrot::after {
+    content: '^';
+    display: block;
+    transform: scaleY(1); 
+    color: #ffc800;
+    transition: transform 0.5s ease, color 0.5s ease; 
+}
+
+.calendar .month-year:hover .carrot::after {
+    transform: scaleY(-1); 
+    color: #ff5500; 
+} 
+
 
 
 
@@ -153,7 +185,7 @@ body {
 .arrow {
     position: absolute;
     color: #000000;
-    font-size: 25px;
+    font-size: 20px;
     cursor: pointer;
     transition: color 0.5s;
 }
@@ -164,13 +196,13 @@ body {
 
 .arrow.left {
     left: 0;
-    padding-left: 20px;
+    padding-left: 15px;
     padding-right: 10px;
 }
 
 .arrow.right {
     right: 0;
-    padding-right: 20px;
+    padding-right: 15px;
     padding-left: 10px;
 }
 
@@ -224,6 +256,8 @@ body {
     border: solid 2px rgb(115, 0, 255);
     background-color: #ff6f00;
 
+    position: relative;
+
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -239,6 +273,11 @@ body {
 .yearMonths-display:hover {
     background-color: #ffc800;
 }
+
+.yearMonths-display:hover .carrot::after {
+    transform: scaleY(-1); 
+    color: #ff5500; 
+} 
 
 .months-selection {
     display: flex;
