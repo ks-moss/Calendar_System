@@ -181,7 +181,7 @@ function displayYears(currentYear) {
 
     YEARS_OPTIONS = generateYears(currentYear);
 
-    console.log(YEARS_OPTIONS);
+    // console.log(YEARS_OPTIONS);
 
     let yearsHtml = '<div class="years-selection">';
     
@@ -235,7 +235,7 @@ function displayYears(currentYear) {
     // Attach click event listeners to each year option
     $('.years-options').on('click', function() {
         const selectedYear = $(this).data('year');
-        console.log(selectedYear);
+        // console.log(selectedYear);
      
         $('.years-container').removeClass('display-flex');
         $('.years-container').addClass('display-none');
@@ -306,7 +306,7 @@ function displayMonths(selectedYear) {
 
     $('.months-options').on('click', function() {
         const selectedMonth = $(this).data('month');
-        console.log(selectedMonth);
+        // console.log(selectedMonth);
 
         // Usage
         const data_input = {
@@ -456,7 +456,7 @@ async function fetchAndGenerateCalendarByMonth(data_input) {
 
         $('.calendar caption').on('click', function() {
             var selectedYear = $(this).data('year');
-            console.log(selectedYear);
+            // console.log(selectedYear);
 
             $('.calendar-container').removeClass('display-flex');
             $('.calendar-container').addClass('display-none');
@@ -473,16 +473,16 @@ async function fetchAndGenerateCalendarByMonth(data_input) {
 
 
 
+
+
 // Create a new Date object
 const currentDate = new Date();
-
 // Get the individual components of the date
 const year = currentDate.getFullYear();
 const month = currentDate.getMonth() + 1; // Months are zero-based
 const day = currentDate.getDate();
 
 console.log(year + "-" + month + "-"  + day); // Output the formatted date
-
 
 const data_input = {
     year: year,
