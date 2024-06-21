@@ -153,15 +153,13 @@ body {
 .arrow {
     position: absolute;
     color: #000000;
-    font-size: 20px;
-    /* margin-left: 20px;
-    margin-right: 20px; */
+    font-size: 25px;
     cursor: pointer;
+    transition: color 0.5s;
 }
 
 .arrow:hover {
     color: gray;
-
 }
 
 .arrow.left {

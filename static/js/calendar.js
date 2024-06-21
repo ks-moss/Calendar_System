@@ -5,6 +5,10 @@ const MONTHS = [
     "September", "October", "November", "December"
 ];
 
+const DFW = [
+    "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", 
+    "Friday", "Saturday"
+];
 
 
 
@@ -155,14 +159,12 @@ const MONTHS = [
 function generateYears(currentYear) {
 
     minus_year = currentYear - 4;
+    plus_year = currentYear + 4;
+    temp = [];
 
     if(minus_year < 1500){
         minus_year = 1500;
     }
-
-    plus_year = currentYear + 4;
-
-    temp = [];
 
     for(var i=minus_year; i<=plus_year; i++){
         temp.push(i);
@@ -220,7 +222,15 @@ function displayYears(currentYear) {
 
     $('.years-container').addClass('display-flex');
 
-    
+
+    if(YEARS_OPTIONS[0] === 1500) {
+        $('.arrow.left').removeClass('display-flex');
+        $('.arrow.left').addClass('display-none');
+    }
+    else {
+        $('.arrow.left').removeClass('display-none');
+        $('.arrow.left').addClass('display-flex');
+    }
 
     // Attach click event listeners to each year option
     $('.years-options').on('click', function() {
@@ -235,17 +245,11 @@ function displayYears(currentYear) {
 
     // Attach click event listeners to the arrow buttons
     let temp_year = currentYear;
-    $('.arrow.left').on('click', function() {
-       
-        if(YEARS_OPTIONS[0] > 1500){
-            temp_year -= 8;
-            displayYears(temp_year); 
-        }
-        else{
-            console.error("Error: Year cannot be LOWER than 1500. Current Index =", YEARS_OPTIONS[0]);
-        }
-        
+    $('.arrow.left').on('click', function() {    
+        temp_year -= 8;
+        displayYears(temp_year); 
     });
+
     $('.arrow.right').on('click', function() {
         temp_year += 8;
         displayYears(temp_year);
@@ -388,8 +392,6 @@ function generateCalendarForYear(response) {
             calendarHTML += '<tr>';
         }
 
-        
-
         if (dayOfWeek > 0 && day === 1) {
             for (var j = 0; j < dayOfWeek; j++) {
                 calendarHTML += '<td></td>';
@@ -398,7 +400,7 @@ function generateCalendarForYear(response) {
         }
 
         // Add data attributes to the td element
-        calendarHTML += '<td data-year="' + year + '" data-month="' + month + '" data-day="' + day + '">' + day + '</td>';
+        calendarHTML += '<td data-year="' + year + '" data-month="' + month + '" data-day="' + day + '" data-dfw="' + DFW[dayOfWeek] + '">' + day + '</td>';
 
         if (dayOfWeek === 6) {
             calendarHTML += '</tr>';
@@ -444,9 +446,11 @@ async function fetchAndGenerateCalendarByMonth(data_input) {
         $('.calendar td').on('click', function() {
             var year = $(this).data('year');
             var month = $(this).data('month');
-            var day = $(this).data('day');
+            var day = $(this).data('day'); 
+            var dfw = $(this).data('dfw'); 
+
             if (day) { // Ensure the cell is not empty
-                console.log(year, month, day);
+                console.log(year, month, day, dfw);
             }
         });
 
