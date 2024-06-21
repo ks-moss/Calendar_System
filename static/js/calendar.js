@@ -266,9 +266,6 @@ function displayYears(currentYear) {
 
 function displayMonths(selectedYear) {
 
-    console.log(selectedYear)
-
-
     let monthsHtml = '<div class="months-selection">';
     
     for (let i = 0; i < MONTHS.length; i++) {
@@ -277,7 +274,7 @@ function displayMonths(selectedYear) {
             monthsHtml += '<div class="months-row">'
         }
         
-        monthsHtml += `<div class="months-options" data-month="${MONTHS[i]}">${MONTHS[i]}</div>`;
+        monthsHtml += `<div class="months-options" data-month="${MONTHS[i]}">${MONTHS[i].slice(0,3) + "."}</div>`;
 
         if ((i + 1) % 3 === 0) {
             monthsHtml += '</div>';
@@ -485,7 +482,7 @@ const year = currentDate.getFullYear();
 const month = currentDate.getMonth() + 1; // Months are zero-based
 const day = currentDate.getDate();
 
-console.log(year + "-" + month + "-"  + day); // Output the formatted date
+console.log("Today date is: " + year + "-" + month + "-"  + day); // Output the formatted date
 
 const data_input = {
     year: year,
