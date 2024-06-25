@@ -22,7 +22,6 @@ body {
     
 }
 
-
 .calendar-container {
     
     width: 100%;
@@ -212,7 +211,6 @@ body {
     justify-content: center;
     align-items: center;
     border: solid 2px green;
-    padding: 10px;
 }
 
 .years-row {
@@ -251,6 +249,16 @@ body {
     border: solid 2px rgb(0, 0, 0);
 }
 
+
+.months-selection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: solid 2px green;
+}
+
+
 .yearMonths-display {
     width: 100%;
     border: solid 2px rgb(115, 0, 255);
@@ -278,15 +286,6 @@ body {
     transform: scaleY(-1); 
     color: #ff5500; 
 } 
-
-.months-selection {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: solid 2px green;
-    padding: 10px;
-}
 
 .months-row {
     display: flex;

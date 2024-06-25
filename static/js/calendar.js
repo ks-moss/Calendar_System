@@ -184,6 +184,12 @@ function displayYears(currentYear) {
     // console.log(YEARS_OPTIONS);
 
     let yearsHtml = '<div class="years-selection">';
+
+    yearsHtml += '<div class="years-display">' +
+                    '<div class="arrow left">&lt;</div>' + 
+                    YEARS_OPTIONS[0] + " - " + YEARS_OPTIONS[YEARS_OPTIONS.length-1] + 
+                    '<div class="arrow right">&gt;</div>' +
+                 '</div>';
     
     for (let i = 0; i < YEARS_OPTIONS.length; i++) {
 
@@ -207,18 +213,7 @@ function displayYears(currentYear) {
     yearsHtml += '</div>';
 
 
-    const $yearSelection = $(
-
-        '<div class="years-display">' +
-            '<div class="arrow left">&lt;</div>' + 
-            YEARS_OPTIONS[0] + " - " + YEARS_OPTIONS[YEARS_OPTIONS.length-1] + 
-            '<div class="arrow right">&gt;</div>' +
-        '</div>' + yearsHtml
-
-
-    );
-
-    $('.years-container').html($yearSelection);
+    $('.years-container').html(yearsHtml);
 
     $('.years-container').addClass('display-flex');
 
@@ -267,8 +262,13 @@ function displayYears(currentYear) {
 function displayMonths(selectedYear) {
 
     let monthsHtml = '<div class="months-selection">';
+
+    monthsHtml +=   '<div class="yearMonths-display">' +
+                            selectedYear + '<div class="carrot"></div>' +
+                    '</div>';
     
     for (let i = 0; i < MONTHS.length; i++) {
+        
 
         if(i % 3 === 0) {
             monthsHtml += '<div class="months-row">'
@@ -289,16 +289,9 @@ function displayMonths(selectedYear) {
 
     monthsHtml += '</div>';
 
-    const $monthSelection = $(
+  
 
-        '<div class="yearMonths-display">' +
-            selectedYear + '<div class="carrot"></div>' +
-        '</div>' + monthsHtml
-
-
-    );
-
-    $('.months-container').html($monthSelection);
+    $('.months-container').html(monthsHtml);
 
     $('.months-container').removeClass('display-none');
     $('.months-container').addClass('display-flex');
