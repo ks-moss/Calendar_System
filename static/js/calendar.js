@@ -434,9 +434,8 @@ async function fetchAndGenerateCalendarByMonth(data_input) {
         $('.months-container').addClass('display-none');
 
         
-        
-       
         const response = await getCalendarByMonth(data_input);
+        
 
         var calendarHTML = generateCalendarForYear(response);
         $('.calendar-container').html(calendarHTML);
