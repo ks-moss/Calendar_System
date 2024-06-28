@@ -1,16 +1,17 @@
 import threading
 
 
-# Constants
+INIT_CENTURY = [1500, 1600, 1700, 1800]
+
+DAYS_IN_YEAR = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+PROVIDED_DOOMSDAY = [3, 28, 14, 4, 9, 6, 11, 8, 5, 10, 7, 12]
+
 MONTHS = [
     "January", "February", "March", "April",
     "May", "June", "July", "August",
     "September", "October", "November", "December"
 ]
-
-DAYS_IN_YEAR = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-PROVIDED_DOOMSDAY = [3, 28, 14, 4, 9, 6, 11, 8, 5, 10, 7, 12]
 
 DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
@@ -23,6 +24,9 @@ class DOOMSDAY_OF_THE_YEAR:
         self.stop_threads = threading.Event()  # Shared event to signal threads to stop
         self.doomsday_century_code = None
 
+    # Calculate the century code: 2024 -> 2000
+    # (1500, 1600, 1700, 1800) += 400 is equal to 2000 or not
+    # (1500 = 3, 1600 = 2, 1700 = 0,1800 = 5)
     def calculate_century_code(self, init_century):
         doomsday_century_temp = init_century
 
@@ -31,14 +35,26 @@ class DOOMSDAY_OF_THE_YEAR:
 
         while not self.stop_threads.is_set():
             if doomsday_century_temp == int(str(self.year)[:digitCountLastTwo]) * (10 ** digitCountLastTwo):
-                self.doomsday_century_code = {1500: 3, 1600: 2, 1700: 0, 1800: 5}.get(init_century)
+               
+                if init_century == INIT_CENTURY[0]: # 1500
+                    self.doomsday_century_code = 3
+                elif init_century == INIT_CENTURY[1]: # 1600
+                    self.doomsday_century_code = 2
+                elif init_century == INIT_CENTURY[2]: #1700
+                    self.doomsday_century_code = 0
+                elif init_century == INIT_CENTURY[3]: # 1800
+                    self.doomsday_century_code = 5
+                else:
+                    self.doomsday_century_code = None
+
                 self.stop_threads.set()  # Signal other threads to stop
                 return  # Exit the loop and thread
             else:
                 doomsday_century_temp += 400
 
+    # Calculate the century code by using threads
     def get_century_code(self):
-        INIT_CENTURY = [1500, 1600, 1700, 1800]
+        
         threads = []
 
         for init_century in INIT_CENTURY:
@@ -54,12 +70,17 @@ class DOOMSDAY_OF_THE_YEAR:
 
         return self.doomsday_century_code
 
+
+    # This functiopn will calculate for the doomsday of that year (Jan.-Dec.)
     def calculate_doomsday_year(self):
 
         digitCount = len(str(abs(self.year)))
         digitCountLastTwo = digitCount - 2
 
         twoYearAfterCentury = int(str(self.year)[digitCountLastTwo:digitCount])
+
+        # get_century_code is threading function
+        # calculate_century_code is the real function of getting the century code
         century_code = self.get_century_code()
 
         if century_code is None:
@@ -72,13 +93,16 @@ class DOOMSDAY_OF_THE_YEAR:
 
         return total_number  # 0-6
 
+    # Find if that year is leap year or not
     def is_leap_year(self):
 
         if self.year % 4 == 0 and (self.year % 100 != 0 or self.year % 400 == 0):
+            # Leap year
             DAYS_IN_YEAR[1] = 29
             PROVIDED_DOOMSDAY[0] = 32
             PROVIDED_DOOMSDAY[1] = 29
         else:
+            # Not leap year
             DAYS_IN_YEAR[1] = 28
             PROVIDED_DOOMSDAY[0] = 31
             PROVIDED_DOOMSDAY[1] = 28
@@ -94,6 +118,8 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
         self.date = None
         self.calculated_doomsday = None
 
+    # Recalculate after the year has been set by calling
+    # DOOMSDAY_OF_THE_YEAR -> calculate_doomsday_year()
     def set_year(self, year):
         self.year = year
         self.stop_threads.clear()
@@ -101,10 +127,14 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
         super().is_leap_year()
         self.calculated_doomsday = self.calculate_doomsday_year()
 
+    # Reduce time complexity by using all the consttructors
+    # in DAY_OF_THE_WEEK for that year
     def set_date(self, month, date):
         self.month = month
         self.date = date
 
+    # This function will calculate for
+    # the day of the week of that date
     def calculate_day_of_the_week(self):
 
         try:
@@ -122,9 +152,7 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
         
     def by_year(self, years):
 
-        return_value =[]
         temp = []
-        temp_day = []
         temp_month = []
         temp_year = []
 
@@ -142,10 +170,7 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
 
                     self.set_date(month, day)
                     temp.append(f"{self.calculate_day_of_the_week()},{day},{month},{year}")
-                    # print(f"{self.calculate_day_of_the_week()},{day},{month},{year}")
-
-                    # temp_day.append(temp)
-                    # temp = []
+                  
                 temp_month.append(temp)
                 temp = []
             temp_year.append(temp_month)
@@ -185,9 +210,9 @@ def insert_data_by_year(years):
 
         return result
 
+
+# Insert year and month to the constructor
 def insert_data_by_month(year, month):
-        temp_year = []
-        temp_year.append(year)
         
         years = list(map(int, year))
 
@@ -200,27 +225,27 @@ def insert_data_by_month(year, month):
 
 
 
-from datetime import datetime
+# from datetime import datetime
 
-def main():
+# def main():
 
-    start_time = datetime.now()
+#     start_time = datetime.now()
 
-    result = insert_data_by_year([2024, 2025])        
-    # result = insert_data_by_month([2024], "April")
-
-
-    stop_time = datetime.now()
-    print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
-    print(f"Stop time: {stop_time.strftime('%H:%M:%S.%f')[:-3]}\n")
-
-    duration = stop_time - start_time
-    print(f"Duration: {duration}\n")
-
-    print(result)
+#     result = insert_data_by_year([2024, 2025])        
+#     result = insert_data_by_month([2024], "April")
 
 
+#     stop_time = datetime.now()
+#     print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
+#     print(f"Stop time: {stop_time.strftime('%H:%M:%S.%f')[:-3]}\n")
+
+#     duration = stop_time - start_time
+#     print(f"Duration: {duration}\n")
+
+#     print(result)
 
 
-if __name__ == "__main__":
-    main()
+
+
+# if __name__ == "__main__":
+#     main()
