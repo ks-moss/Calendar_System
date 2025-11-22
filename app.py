@@ -26,6 +26,6 @@ if __name__ == '__main__':
 
 
 # To execute the file
-# python -m app
+# python3 -m app
 # lsof -i :5000
 # kill <pid>
