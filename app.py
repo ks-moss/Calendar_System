@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from py.doomsday_algorithm import *
+from py.doomsday_algorithm_v2 import *
 
 app = Flask(__name__)
 
@@ -10,13 +10,13 @@ def new_user():
 @app.route('/get_calendar_year', methods=['POST'])
 def calendar_generator_year():
     YEARS = request.form.getlist('years')  # Retrieve multiple values as a list
-    return insert_data_by_year(YEARS)
+    return get_data_by_year(YEARS)
 
 @app.route('/get_calendar_month', methods=['POST'])
 def calendar_generator_month():
     YEAR = request.form.getlist('year')  # Retrieve multiple values as a list
     MONTH = request.form.get('month')
-    return insert_data_by_month(YEAR, MONTH)
+    return get_data_by_month(YEAR, MONTH)
 
 
 

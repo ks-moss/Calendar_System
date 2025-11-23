@@ -30,11 +30,10 @@ class DOOMSDAY_OF_THE_YEAR:
     def calculate_century_code(self, init_century):
         doomsday_century_temp = init_century
 
-        digitCount = len(str(abs(self.year)))
-        digitCountLastTwo = digitCount - 2
+        century = (self.year // 100) * 100
 
         while not self.stop_threads.is_set():
-            if doomsday_century_temp == int(str(self.year)[:digitCountLastTwo]) * (10 ** digitCountLastTwo):
+            if doomsday_century_temp == century:
                
                 if init_century == INIT_CENTURY[0]: # 1500
                     self.doomsday_century_code = 3
@@ -74,10 +73,7 @@ class DOOMSDAY_OF_THE_YEAR:
     # This functiopn will calculate for the doomsday of that year (Jan.-Dec.)
     def calculate_doomsday_year(self):
 
-        digitCount = len(str(abs(self.year)))
-        digitCountLastTwo = digitCount - 2
-
-        twoYearAfterCentury = int(str(self.year)[digitCountLastTwo:digitCount])
+        last_two_digit_of_year = self.year % 100
 
         # get_century_code is threading function
         # calculate_century_code is the real function of getting the century code
@@ -86,7 +82,7 @@ class DOOMSDAY_OF_THE_YEAR:
         if century_code is None:
             raise ValueError("Century code calculation failed.")
 
-        total_number = century_code + twoYearAfterCentury // 12 + twoYearAfterCentury % 12 + (twoYearAfterCentury % 12) // 4
+        total_number = century_code + last_two_digit_of_year // 12 + last_two_digit_of_year % 12 + (last_two_digit_of_year % 12) // 4
 
         while total_number > 6:
             total_number %= 7
@@ -201,71 +197,70 @@ class DAY_OF_THE_WEEK(DOOMSDAY_OF_THE_YEAR):
 
 
 
-def insert_data_by_year(years):
+def get_data_by_year(years):
         
-        years = list(map(int, years))
+    years = list(map(int, years))
 
-        calendar = DAY_OF_THE_WEEK()
-        result = calendar.by_year(years)
+    calendar = DAY_OF_THE_WEEK()
+    result = calendar.by_year(years)
 
-        return result
+    return result
 
 
 # Insert year and month to the constructor
-def insert_data_by_month(year, month):
+def get_data_by_month(year, month):
         
-        years = list(map(int, year))
+    years = list(map(int, year))
 
-        calendar = DAY_OF_THE_WEEK()
-        result = calendar.by_month(years, month)
+    calendar = DAY_OF_THE_WEEK()
+    result = calendar.by_month(years, month)
 
-        return result
-
-
+    return result
 
 
 
-# from datetime import datetime
-
-# def main():
-
-#     start_time = datetime.now()
-#     print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
-#     print("Calculating...")
-
-#     # Uncomment one
-#     result = insert_data_by_year([2024, 2025]) # or [2023],[2024],[2025]  
-#     # result = insert_data_by_month([2024], "April")
 
 
-#     stop_time_procss = datetime.now()
+from datetime import datetime
+
+def main():
+
+    start_time = datetime.now()
+    print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
+    print("Calculating...")
+
+    # Uncomment one
+    result = get_data_by_year([2024, 1234567]) # or [2023],[2024],[2025]  
+    # result = get_data_by_month([1234567], "December")
+
+    stop_time_procss = datetime.now()
 
 
-#     for years in result:
+    for years in result:
 
-#         for printResult in years:
-#             date_parts = printResult[0].split(',')
-#             month = date_parts[2]
-#             year = date_parts[3]
+        for printResult in years:
+            date_parts = printResult[0].split(',')
+            month = date_parts[2]
+            year = date_parts[3]
 
-#             print("\n","+---",month,"-", year,"---+", "\n")
+            print("\n","+---",month,"-", year,"---+", "\n")
 
-#             for printDates in printResult:
-#                 print(printDates)
+            for printDates in printResult:
+                print(printDates)
 
-#     stop_time = datetime.now()
+    stop_time = datetime.now()
 
-#     print(f"\nStart time:                               {start_time.strftime('%H:%M:%S.%f')[:-3]}")
-#     print(f"Stop time:                                {stop_time_procss.strftime('%H:%M:%S.%f')[:-3]}")
-#     print(f"Stop time (excludes calculation process): {stop_time.strftime('%H:%M:%S.%f')[:-3]}\n")
+    print(f"\nStart time:                               {start_time.strftime('%H:%M:%S.%f')[:-3]}")
+    print(f"Stop time:                                {stop_time_procss.strftime('%H:%M:%S.%f')[:-3]}")
+    print(f"Stop time (excludes calculation process): {stop_time.strftime('%H:%M:%S.%f')[:-3]}\n")
 
-#     durationP = stop_time_procss - start_time
-#     totalDuration = stop_time - start_time
+    durationP = stop_time_procss - start_time
+    totalDuration = stop_time - start_time
 
-#     print(f"Duration :                                {durationP}")
-#     print(f"Duration (excludes calculation process):  {totalDuration}\n")
+    print(f"Duration :                                {durationP}")
+    print(f"Duration (excludes calculation process):  {totalDuration}\n")
 
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
