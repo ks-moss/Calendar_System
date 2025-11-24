@@ -124,14 +124,10 @@ class DOOMSDAY:
         return_value =[]
         start_date = 1 # Start from day 1
 
-
-
         for day in range(start_date, DAYS_IN_YEAR[MONTHS.index(month)] + 1):
 
             self.set_data(day, month, year)
             return_value.append(f"{self.get_day_of_the_week()},{day},{month},{year}")
-
-
 
 
         return return_value
@@ -150,17 +146,17 @@ def get_data_by_year(years):
     years = list(map(int, years))
     result = calendar.by_year(years)
 
-    for years in result:
+    # for years in result:
 
-        for printResult in years:
-            date_parts = printResult[0].split(',')
-            month = date_parts[2]
-            year = date_parts[3]
+    #     for printResult in years:
+    #         date_parts = printResult[0].split(',')
+    #         month = date_parts[2]
+    #         year = date_parts[3]
 
-            print("\n","+---",month,"-", year,"---+", "\n")
+    #         print("\n","+---",month,"-", year,"---+", "\n")
 
-            for printDates in printResult:
-                print(printDates)
+    #         for printDates in printResult:
+    #             print(printDates)
 
     return result
 
@@ -172,18 +168,19 @@ def get_data_by_month(year, month):
 
     result = calendar.by_month(int(year[0]), month)
 
-    for day in result:
-        print(day)
+    # for day in result:
+    #     print(day)
 
     return result
 
-
+        
 
 
 
 # def main():
 
 #     get_data_by_year([9999999999999, 1234567])
+#     print("\n---------------------------------------------------\n")
 #     get_data_by_month(1234567, "December")
 
 

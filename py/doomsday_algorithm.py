@@ -1,6 +1,5 @@
 import threading
 
-
 INIT_CENTURY = [1500, 1600, 1700, 1800]
 
 DAYS_IN_YEAR = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
@@ -14,8 +13,6 @@ MONTHS = [
 ]
 
 DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-
-
 
 
 class DOOMSDAY_OF_THE_YEAR:
@@ -220,47 +217,46 @@ def get_data_by_month(year, month):
 
 
 
+# from datetime import datetime
 
-from datetime import datetime
+# def main():
 
-def main():
+#     start_time = datetime.now()
+#     print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
+#     print("Calculating...")
 
-    start_time = datetime.now()
-    print(f"\nStart time: {start_time.strftime('%H:%M:%S.%f')[:-3]}")
-    print("Calculating...")
+#     # Uncomment one
+#     result = get_data_by_year([2024, 1234567]) # or [2023],[2024],[2025]  
+#     # result = get_data_by_month([1234567], "December")
 
-    # Uncomment one
-    result = get_data_by_year([2024, 1234567]) # or [2023],[2024],[2025]  
-    # result = get_data_by_month([1234567], "December")
-
-    stop_time_procss = datetime.now()
-
-
-    for years in result:
-
-        for printResult in years:
-            date_parts = printResult[0].split(',')
-            month = date_parts[2]
-            year = date_parts[3]
-
-            print("\n","+---",month,"-", year,"---+", "\n")
-
-            for printDates in printResult:
-                print(printDates)
-
-    stop_time = datetime.now()
-
-    print(f"\nStart time:                               {start_time.strftime('%H:%M:%S.%f')[:-3]}")
-    print(f"Stop time:                                {stop_time_procss.strftime('%H:%M:%S.%f')[:-3]}")
-    print(f"Stop time (excludes calculation process): {stop_time.strftime('%H:%M:%S.%f')[:-3]}\n")
-
-    durationP = stop_time_procss - start_time
-    totalDuration = stop_time - start_time
-
-    print(f"Duration :                                {durationP}")
-    print(f"Duration (excludes calculation process):  {totalDuration}\n")
+#     stop_time_procss = datetime.now()
 
 
+#     for years in result:
 
-if __name__ == "__main__":
-    main()
+#         for printResult in years:
+#             date_parts = printResult[0].split(',')
+#             month = date_parts[2]
+#             year = date_parts[3]
+
+#             print("\n","+---",month,"-", year,"---+", "\n")
+
+#             for printDates in printResult:
+#                 print(printDates)
+
+#     stop_time = datetime.now()
+
+#     print(f"\nStart time:                               {start_time.strftime('%H:%M:%S.%f')[:-3]}")
+#     print(f"Stop time:                                {stop_time_procss.strftime('%H:%M:%S.%f')[:-3]}")
+#     print(f"Stop time (excludes calculation process): {stop_time.strftime('%H:%M:%S.%f')[:-3]}\n")
+
+#     durationP = stop_time_procss - start_time
+#     totalDuration = stop_time - start_time
+
+#     print(f"Duration :                                {durationP}")
+#     print(f"Duration (excludes calculation process):  {totalDuration}\n")
+
+
+
+# if __name__ == "__main__":
+#     main()
