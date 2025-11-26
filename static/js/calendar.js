@@ -178,7 +178,6 @@ function generateYears(currentYear) {
 
 function displayYears(currentYear) {
 
-
     YEARS_OPTIONS = generateYears(currentYear);
 
     // console.log(YEARS_OPTIONS);
