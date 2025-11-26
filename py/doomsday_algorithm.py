@@ -206,7 +206,7 @@ def get_data_by_year(years):
 
 # Insert year and month to the constructor
 def get_data_by_month(year, month):
-        
+    
     years = list(map(int, year))
 
     calendar = DAY_OF_THE_WEEK()
